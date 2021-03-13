@@ -92,3 +92,11 @@ The following packages were added:
   com.unity.timeline@1.6.0-pre.1
   com.unity.ugui@1.0.0
   com.unity.visualscripting@1.5.1-pre.5
+
+=== Thu Mar 11 17:26:15 2021
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were removed:
+  com.unity.shadergraph@12.0.0

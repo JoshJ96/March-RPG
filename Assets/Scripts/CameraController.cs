@@ -25,9 +25,32 @@ public class CameraController : MonoBehaviour
     public float minRotateY;
     public float maxRotateY;
 
+    bool active = true;
+
+    private void Start()
+    {
+        GameEvents.instance.changePlayerState += ChangePlayerState;
+    }
+
+    private void ChangePlayerState(PlayerController.States state)
+    {
+        switch (state)
+        {
+            case PlayerController.States.Normal:
+                active = true;
+                break;
+            case PlayerController.States.Paused:
+                active = false;
+                break;
+        }
+    }
+
     void Update()
     {
-        CameraMovement();
+        if (active)
+        {
+            CameraMovement();
+        }
     }
 
     private void CameraMovement()

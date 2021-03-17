@@ -10,7 +10,6 @@ public class ClickIndicator : MonoBehaviour
     {
         GameEvents.instance.navClick += NavClick;
         GameEvents.instance.onClickRelease += OnClickRelease;
-
     }
 
     private void NavClick(Vector3 point)

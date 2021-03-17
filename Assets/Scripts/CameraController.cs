@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class CameraController : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class CameraController : MonoBehaviour
     public float maxRotateY;
 
     void Update()
+    {
+        CameraMovement();
+    }
+
+    private void CameraMovement()
     {
         rotateInputX -= (Input.GetAxis("Horizontal")) * rotateSpeedX * Time.deltaTime;
         rotateInputY -= ((Input.GetAxis("Vertical")) * rotateSpeedY * Time.deltaTime) / 100;
@@ -53,5 +59,4 @@ public class CameraController : MonoBehaviour
         transform.RotateAround(target.position, Vector3.up, rotateInputX);
         offset = new Vector3(offset.x, Mathf.Clamp(rotateInputY, minRotateY, maxRotateY), offset.z);
     }
-
 }

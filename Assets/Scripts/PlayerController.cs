@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
         FocusedInteractable
     }
 
-    States CurrentState = States.Normal;
+    public States CurrentState = States.Normal;
 
     public States currentState
     {
@@ -95,6 +95,9 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case States.FocusedInteractable:
+
+                //Keep following target during update
+                agent.SetDestination(focus.transform.position);
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     currentState = States.Paused;
@@ -120,10 +123,12 @@ public class PlayerController : MonoBehaviour
         switch (currentState)
         {
             case States.Normal:
+                currentState = States.Normal;
                 agent.SetDestination(point);
                 focus = null;
                 break;
             case States.FocusedInteractable:
+                currentState = States.Normal;
                 agent.SetDestination(point);
                 focus = null;
                 break;
@@ -135,9 +140,11 @@ public class PlayerController : MonoBehaviour
         switch (currentState)
         {
             case States.Normal:
+                currentState = States.FocusedInteractable;
                 focus = obj;
                 break;
             case States.FocusedInteractable:
+                currentState = States.FocusedInteractable;
                 focus = obj;
                 break;
         }

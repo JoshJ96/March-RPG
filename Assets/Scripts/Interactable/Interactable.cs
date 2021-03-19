@@ -9,7 +9,6 @@ public class Interactable : MonoBehaviour
               Variables
     -----------------------------*/
 
-
     #region Interact State Machine
 
     public enum InteractStates

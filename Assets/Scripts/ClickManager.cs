@@ -5,16 +5,24 @@ using UnityEngine.AI;
 
 public class ClickManager : MonoBehaviour
 {
-    RaycastHit hit;
+    RaycastHit clickedLocation;
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButton(0))
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out clickedLocation, 100))
             {
-                GameEvents.instance.NavClick(hit.point);
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(clickedLocation.point, out hit, 0.1f, NavMesh.AllAreas))
+                {
+                    GameEvents.instance.NavClick(clickedLocation.point);
+                }
+                else
+                {
+                    GameEvents.instance.OnClickRelease();
+                }
             }
 
         }

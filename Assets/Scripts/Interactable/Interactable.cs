@@ -5,61 +5,165 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    bool showOutline = true;
+    /*----------------------------
+              Variables
+    -----------------------------*/
+
+
+    #region Interact State Machine
+
+    public enum InteractStates
+    {
+        Unfocused,     //No activity, but active
+        Inactive,      //Game paused
+        Hovered,       //Mouse hovered
+        Buildingfocus, //Mouse being held on interactable
+        Focused        //Ready to focus towards object
+    }
+
+    public InteractStates InteractState;
+    InteractStates interactState
+    {
+        get
+        {
+            return InteractState;
+        }
+        set
+        {
+            switch (value)
+            {
+                case InteractStates.Inactive:
+                    GameEvents.instance.HideInteractableHoverText();
+                    ChangeOutline(0.0f, Color.white);
+                    break;
+                case InteractStates.Unfocused:
+                    GameEvents.instance.HideInteractableHoverText();
+                    ChangeOutline(0.0f, Color.white);
+                    break;
+                case InteractStates.Hovered:
+                    GameEvents.instance.ShowInteractableHoverText(this);
+                    ChangeOutline(4.0f, Color.white);
+                    break;
+                case InteractStates.Buildingfocus:
+                    GameEvents.instance.ShowInteractableHoverText(this);
+                    ChangeOutline(4.0f, Color.white);
+                    break;
+                case InteractStates.Focused:
+                    GameEvents.instance.ShowInteractableHoverText(this);
+                    ChangeOutline(4.0f, Color.yellow);
+                    break;
+                default:
+                    break;
+            }
+            InteractState = value;
+        }
+    }
+
+    #endregion
+
+    //Interactable object properties
     public string objectName;
     public string hoverText;
     Outline outline;
-    private void Awake()
+
+    /*----------------------------
+                Start
+    -----------------------------*/
+    private void Start()
     {
+        //Event subscriptions
+        GameEvents.instance.changePlayerState += ChangePlayerState;
+        GameEvents.instance.interactableClicked += InteractableClicked;
+        GameEvents.instance.navClick += NavClick;
+
+        //Outline component
         outline = gameObject.AddComponent<Outline>();
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.white;
         outline.OutlineWidth = 0f;
     }
 
-    private void Start()
+    /*----------------------------
+            Mouse Actions
+    -----------------------------*/
+    private void OnMouseEnter()
     {
-        GameEvents.instance.changePlayerState += ChangePlayerState;
+        switch (interactState)
+        {
+            case InteractStates.Unfocused:
+                interactState = InteractStates.Hovered;
+                break;
+            case InteractStates.Focused:
+                GameEvents.instance.ShowInteractableHoverText(this);
+                break;
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        switch (interactState)
+        {
+            case InteractStates.Hovered:
+                interactState = InteractStates.Unfocused;
+                break;
+            case InteractStates.Focused:
+                GameEvents.instance.HideInteractableHoverText();
+                break;
+        }
+    }
+
+    private void OnMouseUp()
+    {
+        if (interactState != InteractStates.Inactive)
+        {
+            GameEvents.instance.InteractableClicked(this);
+            interactState = InteractStates.Focused;
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        //Nothing here yet
+    }
+
+    /*----------------------------
+                 GFX
+    -----------------------------*/
+    void ChangeOutline(float width, Color color)
+    {
+        outline.OutlineWidth = width;
+        outline.OutlineColor = color;
+    }
+
+    /*----------------------------
+            Event Responses
+    -----------------------------*/
+    private void InteractableClicked(Interactable obj)
+    {
+        //De-focus this interactable if a different one was clicked
+        if (obj != this)
+        {
+            interactState = InteractStates.Unfocused;
+        }
     }
 
     private void ChangePlayerState(PlayerController.States state)
     {
+        //Become unfocused if the game is paused
         switch (state)
         {
             case PlayerController.States.Normal:
-                showOutline = true;
+                interactState = InteractStates.Unfocused;
                 break;
             case PlayerController.States.Paused:
-                HideOutline();
-                showOutline = false;
+                interactState = InteractStates.Inactive;
                 break;
         }
     }
 
-    private void OnMouseEnter()
+    private void NavClick(Vector3 point)
     {
-        if (showOutline)
-        {
-            ShowOutline();
-            GameEvents.instance.HoverInteractable(this);
-        }
-    }
-    private void OnMouseExit()
-    {
-        if (showOutline)
-        {
-            HideOutline();
-            GameEvents.instance.DeHoverInteractable();
-        }
-    }
-
-    void ShowOutline()
-    {
-        outline.OutlineWidth = 4f;
-    }
-
-    void HideOutline()
-    {
-        outline.OutlineWidth = 0f;
+        //Disable the interactable if user clicks away
+        interactState = InteractStates.Unfocused;
     }
 }

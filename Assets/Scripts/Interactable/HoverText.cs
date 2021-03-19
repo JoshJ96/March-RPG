@@ -8,15 +8,54 @@ using UnityEngine.UIElements;
 
 public class HoverText : MonoBehaviour
 {
-    bool active = true;
-    Animator animator;
-    public TextMeshProUGUI text;
+
+    #region Hover State Machine
+
+    public enum States
+    {
+        WaitingForHover,
+        Inactive,
+        Hover
+    }
+
+    public States HoverState;
+    States hoverState
+    {
+        get
+        {
+            return HoverState;
+        }
+        set
+        {
+            switch (value)
+            {
+                case States.WaitingForHover:
+                    transform.localScale = Vector3.zero;
+                    break;
+                case States.Inactive:
+                    transform.localScale = Vector3.zero;
+                    break;
+                case States.Hover:
+                    text.text = hoverText;
+                    transform.localScale = Vector3.one;
+                    break;
+                default:
+                    break;
+            }
+
+            HoverState = value;
+        }
+    }
+    #endregion
+
+    TextMeshProUGUI text;
+    string hoverText;
+
     void Start()
     {
-        animator = GetComponent<Animator>();
         text = GetComponent<TextMeshProUGUI>();
-        GameEvents.instance.hoverInteractable += HoverInteractable;
-        GameEvents.instance.deHoverInteractable += DeHoverInteractable;
+        GameEvents.instance.showInteractableHoverText += ShowInteractableHoverText;
+        GameEvents.instance.hideInteractableHoverText += HideInteractableHoverText;
         GameEvents.instance.changePlayerState += ChangePlayerState;
     }
 
@@ -25,37 +64,37 @@ public class HoverText : MonoBehaviour
         switch (state)
         {
             case PlayerController.States.Normal:
-                active = true;
+                hoverState = States.WaitingForHover;
                 break;
             case PlayerController.States.Paused:
-                animator.SetTrigger("Close");
-                active = false;
+                hoverState = States.Inactive;
                 break;
         }
     }
 
-    private void DeHoverInteractable()
+    private void HideInteractableHoverText()
     {
-        if (active)
-        {
-            animator.SetTrigger("Close");
-        }
+        hoverState = States.WaitingForHover;
     }
 
-    private void HoverInteractable(Interactable hovered)
+    private void ShowInteractableHoverText(Interactable hovered)
     {
-        if (active)
+        switch (hoverState)
         {
-            animator.SetTrigger("Open");
-            text.text = hovered.hoverText;
+            case States.WaitingForHover:
+                hoverText = hovered.hoverText;
+                hoverState = States.Hover;
+                break;
         }
     }
 
     private void Update()
     {
-        if (active)
+        switch (hoverState)
         {
-            transform.position = Input.mousePosition;
+            case States.Hover:
+                transform.position = Input.mousePosition;
+                break;
         }
     }
 }

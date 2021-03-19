@@ -48,11 +48,19 @@ public class GameEvents : MonoBehaviour
     /*----------------------------
         Interactable Events
     -----------------------------*/
-    public event Action<Interactable> hoverInteractable;
-    public void HoverInteractable(Interactable hovered) => hoverInteractable?.Invoke(hovered);
 
-    public event Action deHoverInteractable;
-    public void DeHoverInteractable() => deHoverInteractable?.Invoke();
+    //Interactable object hovered
+    public event Action<Interactable> showInteractableHoverText;
+    public void ShowInteractableHoverText(Interactable hovered) => showInteractableHoverText?.Invoke(hovered);
+
+    //Interactable object de-hovered
+    public event Action hideInteractableHoverText;
+    public void HideInteractableHoverText() => hideInteractableHoverText?.Invoke();
+
+    //Interactable object clicked
+    public event Action<Interactable> interactableClicked;
+    public void InteractableClicked(Interactable obj) => interactableClicked?.Invoke(obj);
+
 
     /*----------------------------
         UI Events: Title Screen

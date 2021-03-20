@@ -74,7 +74,7 @@ public class TitleScreenManager : MonoBehaviour
     private void StartFile(GameData data)
     {
         GameDataManager.instance.gameData = data;
-        SceneManager.LoadScene("DevTest");
+        SceneManager.LoadScene("DevTest", LoadSceneMode.Single);
     }
 
     private void BackButton() => currentState = States.Normal;

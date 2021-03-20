@@ -124,7 +124,7 @@ public class Interactable : MonoBehaviour
             return;
         }
 
-        if (interactState != InteractStates.Inactive)
+        if (interactState == InteractStates.Hovered)
         {
             GameEvents.instance.InteractableClicked(this);
             interactState = InteractStates.Focused;

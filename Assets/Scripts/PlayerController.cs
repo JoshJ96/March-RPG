@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
     NavMeshAgent agent;
     Interactable Focus;
+    public Animator animator;
+
     Interactable focus
     {
         get
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
         //Components
         agent = GetComponent<NavMeshAgent>();
+        //todo: animator
     }
 
     /*----------------------------
@@ -83,6 +86,9 @@ public class PlayerController : MonoBehaviour
     -----------------------------*/
     private void Update()
     {
+        //Animate the player
+        animator.SetFloat("Blend", agent.velocity.normalized.magnitude);
+
         switch (CurrentState)
         {
             case States.Normal:

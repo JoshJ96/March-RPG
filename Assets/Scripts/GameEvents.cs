@@ -83,4 +83,14 @@ public class GameEvents : MonoBehaviour
     -----------------------------*/
     public event Action<PauseMenuManagement.States> changePauseState;
     public void ChangePauseState(PauseMenuManagement.States state) => changePauseState?.Invoke(state);
+
+    /*----------------------------
+        Dev Tools Events
+    -----------------------------*/
+    //Dev tools button click
+    public event Action devToolsButtonClick;
+    public void DevToolsButtonClick() => devToolsButtonClick?.Invoke();
+
+    public event Action<DevToolsManager.State> changeDevToolsState;
+    public void ChangeDevToolsState(DevToolsManager.State state) => changeDevToolsState?.Invoke(state);
 }

@@ -79,7 +79,7 @@ public class PauseMenuManagement : MonoBehaviour
         switch (playerState)
         {
             case PlayerController.States.Normal:
-                this.currentState = States.Inactive;
+                //this.currentState = States.Inactive;
                 break;
         }
     }

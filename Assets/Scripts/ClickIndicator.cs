@@ -21,10 +21,6 @@ public class ClickIndicator : MonoBehaviour
             case PlayerController.States.Normal:
                 active = true;
                 break;
-            case PlayerController.States.Paused:
-                gameObject.SetActive(false);
-                active = false;
-                break;
         }
     }
 

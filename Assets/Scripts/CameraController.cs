@@ -39,9 +39,6 @@ public class CameraController : MonoBehaviour
             case PlayerController.States.Normal:
                 active = true;
                 break;
-            case PlayerController.States.Paused:
-                active = false;
-                break;
         }
     }
 

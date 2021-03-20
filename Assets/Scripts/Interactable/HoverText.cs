@@ -66,9 +66,6 @@ public class HoverText : MonoBehaviour
             case PlayerController.States.Normal:
                 hoverState = States.WaitingForHover;
                 break;
-            case PlayerController.States.Paused:
-                hoverState = States.Inactive;
-                break;
         }
     }
 

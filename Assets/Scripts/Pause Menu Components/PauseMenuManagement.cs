@@ -32,9 +32,11 @@ public class PauseMenuManagement : MonoBehaviour
             switch (value)
             {
                 case States.Inactive:
+                    Time.timeScale = 1;
                     animator.SetTrigger("Close");
                     break;
                 case States.MainMenu:
+                    Time.timeScale = 0;
                     animator.SetTrigger("Open");
                     break;
                 default:
@@ -52,6 +54,21 @@ public class PauseMenuManagement : MonoBehaviour
         GameEvents.instance.changePauseState += ChangePauseState;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (currentState == States.Inactive)
+            {
+                currentState = States.MainMenu;
+            }
+            else
+            {
+                currentState = States.Inactive;
+            }
+        }
+    }
+
     private void ChangePauseState(States state)
     {
         this.currentState = state;
@@ -63,9 +80,6 @@ public class PauseMenuManagement : MonoBehaviour
         {
             case PlayerController.States.Normal:
                 this.currentState = States.Inactive;
-                break;
-            case PlayerController.States.Paused:
-                this.currentState = States.MainMenu;
                 break;
         }
     }

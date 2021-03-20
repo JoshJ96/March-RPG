@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Interactable : MonoBehaviour
 {
@@ -87,6 +88,11 @@ public class Interactable : MonoBehaviour
     -----------------------------*/
     private void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         switch (interactState)
         {
             case InteractStates.Unfocused:
@@ -113,6 +119,11 @@ public class Interactable : MonoBehaviour
 
     private void OnMouseUp()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (interactState != InteractStates.Inactive)
         {
             GameEvents.instance.InteractableClicked(this);
@@ -122,6 +133,11 @@ public class Interactable : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         //Nothing here yet
     }
 
@@ -153,9 +169,6 @@ public class Interactable : MonoBehaviour
         {
             case PlayerController.States.Normal:
                 interactState = InteractStates.Unfocused;
-                break;
-            case PlayerController.States.Paused:
-                interactState = InteractStates.Inactive;
                 break;
         }
     }

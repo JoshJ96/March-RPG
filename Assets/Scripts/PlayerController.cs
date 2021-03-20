@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public enum States
     {
         Normal,
-        Paused,
         FocusedInteractable
     }
 
@@ -32,8 +31,6 @@ public class PlayerController : MonoBehaviour
             switch (value)
             {
                 case States.Normal:
-                    break;
-                case States.Paused:
                     break;
                 case States.FocusedInteractable:
                     break;
@@ -89,26 +86,10 @@ public class PlayerController : MonoBehaviour
         switch (CurrentState)
         {
             case States.Normal:
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    currentState = States.Paused;
-                }
                 break;
             case States.FocusedInteractable:
-
                 //Keep following target during update
                 agent.SetDestination(focus.transform.position);
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    currentState = States.Paused;
-                }
-                break;
-            case States.Paused:
-                agent.SetDestination(transform.position);
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    currentState = States.Normal;
-                }
                 break;
             default:
                 break;

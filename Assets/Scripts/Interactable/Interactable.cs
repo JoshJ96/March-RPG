@@ -65,6 +65,9 @@ public class Interactable : MonoBehaviour
     public string objectName;
     public string hoverText;
     Outline outline;
+    public float interactionRadius;
+    public Transform interactionTransform;
+    List<Vector3> interactPoints = new List<Vector3>(); //8 different interaction points around the interaction radius perimeter
 
     /*----------------------------
                 Start
@@ -142,13 +145,18 @@ public class Interactable : MonoBehaviour
     }
 
     /*----------------------------
-                 GFX
+         Interactable Points
     -----------------------------*/
-    void ChangeOutline(float width, Color color)
+    public List<Vector3> GetInteractablePoints()
     {
-        outline.OutlineWidth = width;
-        outline.OutlineColor = color;
+        return new List<Vector3>
+        {
+            new Vector3(transform.position.x,transform.position.y,transform.position.z)
+        };
     }
+
+
+
 
     /*----------------------------
             Event Responses
@@ -177,5 +185,25 @@ public class Interactable : MonoBehaviour
     {
         //Disable the interactable if user clicks away
         interactState = InteractStates.Unfocused;
+    }
+
+    /*----------------------------
+             GFX
+    -----------------------------*/
+    void ChangeOutline(float width, Color color)
+    {
+        outline.OutlineWidth = width;
+        outline.OutlineColor = color;
+    }
+
+    /*----------------------------
+                Gizmos
+    -----------------------------*/
+    private void OnDrawGizmos()
+    {
+        if (interactionTransform != null)
+        {
+            Gizmos.DrawWireSphere(interactionTransform.position, interactionRadius);
+        }
     }
 }

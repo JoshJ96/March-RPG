@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -69,6 +66,7 @@ public class PlayerController : MonoBehaviour
     -----------------------------*/
     private void Start()
     {
+        path = new NavMeshPath();
         //todo: set spawn from room transfer/save loading
         //transform.position = GameDataManager.instance.GetSavedPlayerPosition();
 
@@ -81,11 +79,25 @@ public class PlayerController : MonoBehaviour
         //todo: animator
     }
 
+    //delete this
+    NavMeshPath path;
+
+
     /*----------------------------
-            Update
+                Update
     -----------------------------*/
     private void Update()
     {
+        //Delete this       (which point is closer?)
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Vector3 test1 = new Vector3(transform.position.x + 20, transform.position.y, transform.position.z);
+            Vector3 test2 = new Vector3(transform.position.x - 5, transform.position.y, transform.position.z);
+
+            print(Helpers.GetNavPathDistance(transform.position, test1));
+            print(Helpers.GetNavPathDistance(transform.position, test2));
+        }
+
         //Animate the player
         animator.SetFloat("Blend", agent.velocity.normalized.magnitude);
 

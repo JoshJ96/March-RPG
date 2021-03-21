@@ -145,6 +145,11 @@ public class PlayerController : MonoBehaviour
                 agent.SetDestination(point);
                 focus = null;
                 break;
+            case States.Interacting:
+                currentState = States.Normal;
+                agent.SetDestination(point);
+                focus = null;
+                break;
         }
     }
 

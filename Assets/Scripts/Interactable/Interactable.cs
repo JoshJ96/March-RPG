@@ -149,9 +149,9 @@ public class Interactable : MonoBehaviour
     -----------------------------*/
     public List<Vector3> GetInteractablePoints()
     {
-        float x = transform.position.x;
-        float y = transform.position.y;
-        float z = transform.position.z;
+        float x = interactionTransform.position.x;
+        float y = interactionTransform.position.y;
+        float z = interactionTransform.position.z;
         float n = interactionRadius;
         return new List<Vector3>
         {        

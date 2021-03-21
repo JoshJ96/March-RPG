@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,5 +33,34 @@ public static class Helpers
 
         //Return the length
         return length;
+    }
+
+    /*-------------------------------------------------------------------
+                            GetClosestPoint
+    Takes list of a source and navmesh points and returns the closest one
+    ---------------------------------------------------------------------*/
+    public static Vector3 GetClosestPoint(Vector3 source, List<Vector3> pointList)
+    {
+        //Keeps track of the point and the distance from the source
+        Dictionary<Vector3, float> distances = new Dictionary<Vector3, float>();
+
+        foreach (Vector3 point in pointList)
+        {
+            float distance = GetNavPathDistance(source, point);
+
+            //Get rid of values that are 0
+            //Todo: optimize interactable's 8 points to check if on navmesh
+            if (distance == 0)
+            {
+                continue;
+            }
+
+            distances.Add(point, distance);
+        }
+
+        //Find the shortest distance
+        Vector3 closestPoint = distances.Aggregate((x, y) => x.Value < y.Value ? x : y).Key;
+
+        return closestPoint;
     }
 }

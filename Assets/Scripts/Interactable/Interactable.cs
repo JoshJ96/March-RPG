@@ -67,7 +67,7 @@ public class Interactable : MonoBehaviour
     Outline outline;
     public float interactionRadius;
     public Transform interactionTransform;
-    List<Vector3> interactPoints = new List<Vector3>(); //8 different interaction points around the interaction radius perimeter
+    public List<Vector3> interactPoints => GetInteractablePoints(); //8 different interaction points around the interaction radius perimeter
 
     /*----------------------------
                 Start
@@ -149,14 +149,30 @@ public class Interactable : MonoBehaviour
     -----------------------------*/
     public List<Vector3> GetInteractablePoints()
     {
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float z = transform.position.z;
+        float n = interactionRadius;
         return new List<Vector3>
-        {
-            new Vector3(transform.position.x,transform.position.y,transform.position.z)
+        {        
+            //Right
+            new Vector3(x + n, y, z),
+            //Left
+            new Vector3(x - n, y, z),
+            //Up
+            new Vector3(x, y, z + n),
+            //Down
+            new Vector3(x, y, z - n),
+            //UpRight
+            new Vector3(x + n, y, z + n),
+            //UpLeft        
+            new Vector3(x - n, y, z + n),
+            //DownRight     
+            new Vector3(x + n, y, z - n),
+            //DownLeft      
+            new Vector3(x - n, y, z - n)
         };
     }
-
-
-
 
     /*----------------------------
             Event Responses
@@ -204,6 +220,12 @@ public class Interactable : MonoBehaviour
         if (interactionTransform != null)
         {
             Gizmos.DrawWireSphere(interactionTransform.position, interactionRadius);
+        }
+
+        foreach (var item in interactPoints)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(item, Vector3.one);
         }
     }
 }

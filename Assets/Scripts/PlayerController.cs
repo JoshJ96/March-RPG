@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     public enum States
     {
         Normal,
-        FocusedInteractable
+        FocusedInteractable,
+        Interacting
     }
 
     public States CurrentState = States.Normal;
@@ -25,15 +26,6 @@ public class PlayerController : MonoBehaviour
         }
         private set
         {
-            switch (value)
-            {
-                case States.Normal:
-                    break;
-                case States.FocusedInteractable:
-                    break;
-                default:
-                    break;
-            }
             GameEvents.instance.ChangePlayerState(value);
             CurrentState = value;
         }
@@ -43,6 +35,8 @@ public class PlayerController : MonoBehaviour
 
     NavMeshAgent agent;
     Interactable Focus;
+    Vector3 target;
+
     public Animator animator;
 
     Interactable focus
@@ -55,7 +49,9 @@ public class PlayerController : MonoBehaviour
         {
             if (value != null)
             {
-                agent.SetDestination(value.transform.position);
+                target = Helpers.GetClosestPoint(transform.position, value.interactPoints);
+
+                agent.SetDestination(Helpers.GetClosestPoint(transform.position, value.interactPoints));
             }
             Focus = value;
         }
@@ -66,7 +62,6 @@ public class PlayerController : MonoBehaviour
     -----------------------------*/
     private void Start()
     {
-        path = new NavMeshPath();
         //todo: set spawn from room transfer/save loading
         //transform.position = GameDataManager.instance.GetSavedPlayerPosition();
 
@@ -79,25 +74,11 @@ public class PlayerController : MonoBehaviour
         //todo: animator
     }
 
-    //delete this
-    NavMeshPath path;
-
-
     /*----------------------------
                 Update
     -----------------------------*/
     private void Update()
     {
-        //Delete this       (which point is closer?)
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Vector3 test1 = new Vector3(transform.position.x + 20, transform.position.y, transform.position.z);
-            Vector3 test2 = new Vector3(transform.position.x - 5, transform.position.y, transform.position.z);
-
-            print(Helpers.GetNavPathDistance(transform.position, test1));
-            print(Helpers.GetNavPathDistance(transform.position, test2));
-        }
-
         //Animate the player
         animator.SetFloat("Blend", agent.velocity.normalized.magnitude);
 
@@ -106,8 +87,14 @@ public class PlayerController : MonoBehaviour
             case States.Normal:
                 break;
             case States.FocusedInteractable:
-                //Keep following target during update
-                agent.SetDestination(focus.transform.position);
+                var hi = Vector3.Distance(transform.position, target);
+                if (transform.position.x == target.x && transform.position.z == target.z)
+                {
+                    print("hi");
+                }
+                break;
+            case States.Interacting:
+                agent.isStopped = true;
                 break;
             default:
                 break;

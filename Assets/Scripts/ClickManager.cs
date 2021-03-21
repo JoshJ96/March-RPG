@@ -19,7 +19,7 @@ public class ClickManager : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out clickedLocation, 100))
             {
                 NavMeshHit hit;
-                if (NavMesh.SamplePosition(clickedLocation.point, out hit, 0.2f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(clickedLocation.point, out hit, 1.0f, NavMesh.AllAreas))
                 {
                   GameEvents.instance.NavClick(clickedLocation.point);
                 }

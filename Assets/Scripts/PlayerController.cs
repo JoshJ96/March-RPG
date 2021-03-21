@@ -26,6 +26,20 @@ public class PlayerController : MonoBehaviour
         }
         private set
         {
+            switch (value)
+            {
+                case States.Normal:
+                    agent.isStopped = false;
+                    break;
+                case States.FocusedInteractable:
+                    agent.isStopped = false;
+                    break;
+                case States.Interacting:
+                    agent.isStopped = true;
+                    break;
+                default:
+                    break;
+            }
             GameEvents.instance.ChangePlayerState(value);
             CurrentState = value;
         }
@@ -87,17 +101,30 @@ public class PlayerController : MonoBehaviour
             case States.Normal:
                 break;
             case States.FocusedInteractable:
-                var hi = Vector3.Distance(transform.position, target);
+                agent.SetDestination(target);
                 if (transform.position.x == target.x && transform.position.z == target.z)
                 {
-                    print("hi");
+                    print("Interact");
+                    currentState = States.Interacting;
+
                 }
                 break;
             case States.Interacting:
-                agent.isStopped = true;
                 break;
             default:
                 break;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (focus != null)
+        {
+            target = Helpers.GetClosestPoint(transform.position, focus.interactPoints);
+        }
+        else
+        {
+            target = transform.position;
         }
     }
 

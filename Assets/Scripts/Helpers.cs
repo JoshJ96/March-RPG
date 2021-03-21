@@ -58,6 +58,11 @@ public static class Helpers
             distances.Add(point, distance);
         }
 
+        if (distances.Count == 0)
+        {
+            return source;
+        }
+
         //Find the shortest distance
         Vector3 closestPoint = distances.Aggregate((x, y) => x.Value < y.Value ? x : y).Key;
 

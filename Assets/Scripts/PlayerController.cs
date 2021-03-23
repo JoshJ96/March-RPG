@@ -4,34 +4,38 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     /*----------------------------
-          Variables
+              Variables
     -----------------------------*/
-
-    #region Player State Machine
-
+    //Definitions
     public enum States
     {
         Normal,
-        FocusedInteractable,
         Interacting
     }
 
-    public States CurrentState = States.Normal;
+    //Fields
+    private Vector3 target;
+    private States currentState = States.Normal;
+    private Interactable focus;
 
-    public States currentState
+    //Properties
+    public Vector3 Target
     {
-        get
+        get {return target;}
+        private set
         {
-            return CurrentState;
+            agent.SetDestination(value);
+            target = value;
         }
+    }
+    public States CurrentState
+    {
+        get {return currentState;}
         private set
         {
             switch (value)
             {
                 case States.Normal:
-                    agent.isStopped = false;
-                    break;
-                case States.FocusedInteractable:
                     agent.isStopped = false;
                     break;
                 case States.Interacting:
@@ -41,43 +45,46 @@ public class PlayerController : MonoBehaviour
                     break;
             }
             GameEvents.instance.ChangePlayerState(value);
-            CurrentState = value;
+            currentState = value;
         }
     }
-
-    #endregion
-
-    NavMeshAgent agent;
-    Interactable Focus;
-    Vector3 target;
-
-    public Animator animator;
-
-    Interactable focus
+    public Interactable Focus
     {
-        get
-        {
-            return Focus;
-        }
-        set
+        get {return focus;}
+        private set
         {
             if (value != null)
             {
-                target = Helpers.GetClosestPoint(transform.position, value.interactPoints);
-
-                agent.SetDestination(Helpers.GetClosestPoint(transform.position, value.interactPoints));
+                bool keepFocus = true;
+                Vector3 tempTarget = Helpers.GetClosestPoint(transform.position, value, out keepFocus);
+                if (keepFocus)
+                {
+                    focus = value;
+                    Target = tempTarget;
+                }
+                else
+                {
+                    focus = null;
+                    Target = transform.position;
+                }
             }
-            Focus = value;
+            else
+            {
+                focus = value;
+            }
         }
     }
+
+    //Unity Components
+    NavMeshAgent agent;
+    public Animator animator;   //TODO: get component
 
     /*----------------------------
                 Start
     -----------------------------*/
     private void Start()
     {
-        //todo: set spawn from room transfer/save loading
-        //transform.position = GameDataManager.instance.GetSavedPlayerPosition();
+        //TODO: set spawn from room transfer/save loading   transform.position = GameDataManager.instance.GetSavedPlayerPosition();
 
         //Event subscriptions
         GameEvents.instance.navClick += NavClick;
@@ -85,7 +92,6 @@ public class PlayerController : MonoBehaviour
 
         //Components
         agent = GetComponent<NavMeshAgent>();
-        //todo: animator
     }
 
     /*----------------------------
@@ -99,14 +105,28 @@ public class PlayerController : MonoBehaviour
         switch (CurrentState)
         {
             case States.Normal:
-                break;
-            case States.FocusedInteractable:
-                agent.SetDestination(target);
-                if (transform.position.x == target.x && transform.position.z == target.z)
-                {
-                    print("Interact");
-                    currentState = States.Interacting;
 
+                //Keep following focus
+                if (Focus != null)
+                {
+                    if (transform.position.x == Target.x && transform.position.z == Target.z)
+                    {
+                        CurrentState = States.Interacting;
+                    }
+                    else
+                    {
+                        bool keepFocus = true;
+                        Vector3 tempTarget = Helpers.GetClosestPoint(transform.position, Focus, out keepFocus);
+                        if (keepFocus)
+                        {
+                            Target = tempTarget;
+                        }
+                        else
+                        {
+                            Focus = null;
+                            Target = transform.position;
+                        }
+                    }
                 }
                 break;
             case States.Interacting:
@@ -116,41 +136,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        if (focus != null)
-        {
-            target = Helpers.GetClosestPoint(transform.position, focus.interactPoints);
-        }
-        else
-        {
-            target = transform.position;
-        }
-    }
-
     /*----------------------------
             Event Responses
     -----------------------------*/
     private void NavClick(Vector3 point)
     {
-        switch (currentState)
-        {
-            case States.Normal:
-                currentState = States.Normal;
-                agent.SetDestination(point);
-                focus = null;
-                break;
-            case States.FocusedInteractable:
-                currentState = States.Normal;
-                agent.SetDestination(point);
-                focus = null;
-                break;
-            case States.Interacting:
-                currentState = States.Normal;
-                agent.SetDestination(point);
-                focus = null;
-                break;
-        }
+        CurrentState = States.Normal;
+        Target = point;
+        Focus = null;
     }
 
     private void InteractableClicked(Interactable obj)
@@ -158,12 +151,7 @@ public class PlayerController : MonoBehaviour
         switch (currentState)
         {
             case States.Normal:
-                currentState = States.FocusedInteractable;
-                focus = obj;
-                break;
-            case States.FocusedInteractable:
-                currentState = States.FocusedInteractable;
-                focus = obj;
+                Focus = obj;
                 break;
         }
     }

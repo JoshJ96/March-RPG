@@ -1,18 +1,18 @@
+/*--------------------------------------------------------------------
+                            Helpers.cs
+This is a static class handling common operations in the game engine
+----------------------------------------------------------------------*/
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-/*----------------------------------------------------------
-    This is a static class handling common operations
-                    in the game engine
-------------------------------------------------------------*/
-
 public static class Helpers
 {
     /*----------------------------------------------------------
-                       GetNavPathDistance
-    Takes two navmesh points and gets the distance of the path
+                           GetNavPathDistance
+     Takes two navmesh points and gets the distance of the path
     ------------------------------------------------------------*/
     public static float GetNavPathDistance(Vector3 source, Vector3 destination)
     {
@@ -39,12 +39,13 @@ public static class Helpers
                             GetClosestPoint
     Takes list of a source and navmesh points and returns the closest one
     ---------------------------------------------------------------------*/
-    public static Vector3 GetClosestPoint(Vector3 source, List<Vector3> pointList)
+    public static Vector3 GetClosestPoint(Vector3 source, Interactable focus, out bool keepFocus)
     {
+        keepFocus = true;
         //Keeps track of the point and the distance from the source
         Dictionary<Vector3, float> distances = new Dictionary<Vector3, float>();
 
-        foreach (Vector3 point in pointList)
+        foreach (Vector3 point in focus.interactPoints)
         {
             float distance = GetNavPathDistance(source, point);
 
@@ -58,13 +59,22 @@ public static class Helpers
             distances.Add(point, distance);
         }
 
+        //If the interactable becomes unreachable, end focus
         if (distances.Count == 0)
         {
+            keepFocus = false;
             return source;
-        }
+        }        
 
         //Find the shortest distance
         Vector3 closestPoint = distances.Aggregate((x, y) => x.Value < y.Value ? x : y).Key;
+
+        //If the interactable becomes too far away, end focus
+        if (Vector3.Distance(source, closestPoint) > 30)
+        {
+            keepFocus = false;
+            return source;
+        }
 
         return closestPoint;
     }

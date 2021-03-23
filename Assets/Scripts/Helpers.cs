@@ -45,7 +45,7 @@ public static class Helpers
         //Keeps track of the point and the distance from the source
         Dictionary<Vector3, float> distances = new Dictionary<Vector3, float>();
 
-        foreach (Vector3 point in focus.interactPoints)
+        foreach (Vector3 point in focus.InteractPoints)
         {
             float distance = GetNavPathDistance(source, point);
 

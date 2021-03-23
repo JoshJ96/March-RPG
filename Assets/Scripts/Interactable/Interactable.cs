@@ -9,42 +9,34 @@ public class Interactable : MonoBehaviour
     /*----------------------------
               Variables
     -----------------------------*/
-
-    #region Interact State Machine
-
+    //Definitions
     public enum InteractStates
     {
         Unfocused,     //No activity, but active
-        Inactive,      //Game paused
         Hovered,       //Mouse hovered
-        Buildingfocus, //Mouse being held on interactable
         Focused        //Ready to focus towards object
     }
 
-    public InteractStates InteractState;
-    InteractStates interactState
+    //Fields
+    private InteractStates interactState;
+    private List<Vector3> interactPoints;
+
+    //Properties
+    public InteractStates InteractState
     {
         get
         {
-            return InteractState;
+            return interactState;
         }
         set
         {
             switch (value)
             {
-                case InteractStates.Inactive:
-                    GameEvents.instance.HideInteractableHoverText();
-                    ChangeOutline(0.0f, Color.white);
-                    break;
                 case InteractStates.Unfocused:
                     GameEvents.instance.HideInteractableHoverText();
                     ChangeOutline(0.0f, Color.white);
                     break;
                 case InteractStates.Hovered:
-                    GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(4.0f, Color.white);
-                    break;
-                case InteractStates.Buildingfocus:
                     GameEvents.instance.ShowInteractableHoverText(this);
                     ChangeOutline(4.0f, Color.white);
                     break;
@@ -55,19 +47,18 @@ public class Interactable : MonoBehaviour
                 default:
                     break;
             }
-            InteractState = value;
+            interactState = value;
         }
     }
-
-    #endregion
-
-    //Interactable object properties
+    public List<Vector3> InteractPoints => GetInteractablePoints();
     public string objectName;
     public string hoverText;
-    Outline outline;
-    public float interactionRadius;
     public Transform interactionTransform;
-    public List<Vector3> interactPoints => GetInteractablePoints(); //8 different interaction points around the interaction radius perimeter
+    public float interactionRadius;
+
+    //Unity Components
+    Outline outline;
+
 
     /*----------------------------
                 Start
@@ -78,6 +69,7 @@ public class Interactable : MonoBehaviour
         GameEvents.instance.changePlayerState += ChangePlayerState;
         GameEvents.instance.interactableClicked += InteractableClicked;
         GameEvents.instance.navClick += NavClick;
+        GameEvents.instance.interactableDefocused += InteractableDefocused;
 
         //Outline component
         outline = gameObject.AddComponent<Outline>();
@@ -87,7 +79,7 @@ public class Interactable : MonoBehaviour
     }
 
     /*----------------------------
-            Mouse Actions
+             Mouse Events
     -----------------------------*/
     private void OnMouseEnter()
     {
@@ -96,56 +88,36 @@ public class Interactable : MonoBehaviour
             return;
         }
 
-        switch (interactState)
+        switch (InteractState)
         {
             case InteractStates.Unfocused:
-                interactState = InteractStates.Hovered;
-                break;
-            case InteractStates.Focused:
-                GameEvents.instance.ShowInteractableHoverText(this);
+                InteractState = InteractStates.Hovered;
                 break;
         }
+
+        GameEvents.instance.ShowInteractableHoverText(this);
     }
 
     private void OnMouseExit()
     {
-        switch (interactState)
+        GameEvents.instance.HideInteractableHoverText();
+
+        switch (InteractState)
         {
             case InteractStates.Hovered:
-                interactState = InteractStates.Unfocused;
+                InteractState = InteractStates.Unfocused;
                 break;
-            case InteractStates.Focused:
-                GameEvents.instance.HideInteractableHoverText();
-                break;
-        }
-    }
-
-    private void OnMouseUp()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        if (interactState == InteractStates.Hovered)
-        {
-            GameEvents.instance.InteractableClicked(this);
-            interactState = InteractStates.Focused;
         }
     }
 
     private void OnMouseDown()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        //Nothing here yet
+        GameEvents.instance.InteractableClicked(this);
+        InteractState = InteractStates.Focused;
     }
 
     /*----------------------------
-         Interactable Points
+         GetInteractablePoints
     -----------------------------*/
     public List<Vector3> GetInteractablePoints()
     {
@@ -175,7 +147,7 @@ public class Interactable : MonoBehaviour
     }
 
     /*----------------------------
-            Event Responses
+             Game Events
     -----------------------------*/
     private void InteractableClicked(Interactable obj)
     {
@@ -203,8 +175,13 @@ public class Interactable : MonoBehaviour
         interactState = InteractStates.Unfocused;
     }
 
+    private void InteractableDefocused()
+    {
+        InteractState = InteractStates.Unfocused;
+    }
+
     /*----------------------------
-             GFX
+                GFX
     -----------------------------*/
     void ChangeOutline(float width, Color color)
     {
@@ -222,7 +199,7 @@ public class Interactable : MonoBehaviour
             Gizmos.DrawWireSphere(interactionTransform.position, interactionRadius);
         }
 
-        foreach (var item in interactPoints)
+        foreach (var item in InteractPoints)
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireCube(item, Vector3.one);

@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                GameEvents.instance.InteractableDefocused();
                 focus = value;
             }
         }
@@ -102,42 +103,33 @@ public class PlayerController : MonoBehaviour
         //Animate the player
         animator.SetFloat("Blend", agent.velocity.normalized.magnitude);
 
-        switch (CurrentState)
-        {
-            case States.Normal:
 
-                //Keep following focus
-                if (Focus != null)
+        //Keep following focus
+        if (Focus != null)
+        {
+            if (transform.position.x == Target.x && transform.position.z == Target.z)
+            {
+                CurrentState = States.Interacting;
+            }
+            else
+            {
+                bool keepFocus = true;
+                Vector3 tempTarget = Helpers.GetClosestPoint(transform.position, Focus, out keepFocus);
+                if (keepFocus)
                 {
-                    if (transform.position.x == Target.x && transform.position.z == Target.z)
-                    {
-                        CurrentState = States.Interacting;
-                    }
-                    else
-                    {
-                        bool keepFocus = true;
-                        Vector3 tempTarget = Helpers.GetClosestPoint(transform.position, Focus, out keepFocus);
-                        if (keepFocus)
-                        {
-                            Target = tempTarget;
-                        }
-                        else
-                        {
-                            Focus = null;
-                            Target = transform.position;
-                        }
-                    }
+                    Target = tempTarget;
                 }
-                break;
-            case States.Interacting:
-                break;
-            default:
-                break;
+                else
+                {
+                    Focus = null;
+                    Target = transform.position;
+                }
+            }
         }
     }
 
     /*----------------------------
-            Event Responses
+              Game Event
     -----------------------------*/
     private void NavClick(Vector3 point)
     {
@@ -151,6 +143,10 @@ public class PlayerController : MonoBehaviour
         switch (currentState)
         {
             case States.Normal:
+                Focus = obj;
+                break;
+            case States.Interacting:
+                CurrentState = States.Normal;
                 Focus = obj;
                 break;
         }

@@ -7114,7 +7114,7 @@ MonoBehaviour:
   InteractState: 0
   objectName: Spruce Tree
   hoverText: <color="yellow">Chop</color> Spruce Tree
-  interactionRadius: 2.99
+  interactionRadius: 2.03
   interactionTransform: {fileID: 4776330902786037054}
 --- !u!208 &445982606
 NavMeshObstacle:
@@ -9177,7 +9177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ffc0e9f9202d0448828f63bcec718d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentState: 0
   animator: {fileID: 731468894}
 --- !u!1 &1248289146
 GameObject:
@@ -18344,7 +18343,7 @@ MonoBehaviour:
   objectName: Bob
   hoverText: <color="yellow">Talk-to</color> Bob
   interactionRadius: 0
-  interactionTransform: {fileID: 0}
+  interactionTransform: {fileID: 2107215478}
 --- !u!1 &2117147190
 GameObject:
   m_ObjectHideFlags: 0
@@ -18601,7 +18600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5735275972692352448, guid: fef2de71f29ece746bfd4bdc38165daf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.1
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 5735275972692352448, guid: fef2de71f29ece746bfd4bdc38165daf, type: 3}
       propertyPath: m_LocalPosition.y

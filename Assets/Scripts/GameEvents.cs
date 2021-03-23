@@ -61,6 +61,10 @@ public class GameEvents : MonoBehaviour
     public event Action<Interactable> interactableClicked;
     public void InteractableClicked(Interactable obj) => interactableClicked?.Invoke(obj);
 
+    //Interactable object de-focused
+    public event Action interactableDefocused;
+    public void InteractableDefocused() => interactableDefocused?.Invoke();
+
 
     /*----------------------------
         UI Events: Title Screen

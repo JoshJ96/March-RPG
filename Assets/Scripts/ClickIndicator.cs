@@ -29,7 +29,8 @@ public class ClickIndicator : MonoBehaviour
         if (active)
         {
             gameObject.SetActive(true);
-            transform.position = point + offset;
+            transform.position = new Vector3(point.x, transform.position.y, point.z);
+            //transform.position = point + offset;
         }
     }
     private void OnClickRelease()

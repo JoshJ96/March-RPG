@@ -12,14 +12,13 @@ public class Interactable : MonoBehaviour
     //Definitions
     public enum InteractStates
     {
-        Unfocused,     //No activity, but active
-        Hovered,       //Mouse hovered
-        Focused        //Ready to focus towards object
+        Unfocused,
+        Hovered,
+        Focused
     }
 
     //Fields
     private InteractStates interactState;
-    private List<Vector3> interactPoints;
 
     //Properties
     public InteractStates InteractState
@@ -154,7 +153,7 @@ public class Interactable : MonoBehaviour
         //De-focus this interactable if a different one was clicked
         if (obj != this)
         {
-            interactState = InteractStates.Unfocused;
+            InteractState = InteractStates.Unfocused;
         }
     }
 
@@ -164,7 +163,7 @@ public class Interactable : MonoBehaviour
         switch (state)
         {
             case PlayerController.States.Normal:
-                interactState = InteractStates.Unfocused;
+                InteractState = InteractStates.Unfocused;
                 break;
         }
     }
@@ -172,7 +171,7 @@ public class Interactable : MonoBehaviour
     private void NavClick(Vector3 point)
     {
         //Disable the interactable if user clicks away
-        interactState = InteractStates.Unfocused;
+        InteractState = InteractStates.Unfocused;
     }
 
     private void InteractableDefocused()

@@ -18,6 +18,11 @@ public class ClickManager : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out clickedLocation, 100))
             {
+                if (clickedLocation.collider.gameObject.layer != 6)
+                {
+                    return;
+                }
+
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(clickedLocation.point, out hit, 1.0f, NavMesh.AllAreas))
                 {

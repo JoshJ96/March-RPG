@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -103,13 +104,16 @@ public class PlayerController : MonoBehaviour
         //Animate the player
         animator.SetFloat("Blend", agent.velocity.normalized.magnitude);
 
-
         //Keep following focus
         if (Focus != null)
         {
             if (transform.position.x == Target.x && transform.position.z == Target.z)
             {
-                CurrentState = States.Interacting;
+                if (currentState == States.Normal)
+                {
+                    CurrentState = States.Interacting;
+                    StartCoroutine(RotateTowards(Focus.transform.position, 0.3f));
+                }
             }
             else
             {
@@ -128,8 +132,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*-------------------------------------------------------------------
+                            RotateTowards
+            Rotates towards a Vector3 destination for X speed
+    ---------------------------------------------------------------------*/
+    float turnSmoothVelocity;
+    public IEnumerator RotateTowards(Vector3 destination, float speed)
+    {
+        while (true)
+        {
+            if (CurrentState != States.Interacting)
+            {
+                break;
+            }
+
+            //Get directional vector towards destination
+            Vector3 targetVector = new Vector3(destination.x - transform.position.x, 0, destination.z - transform.position.z);
+
+            //Calculate movement angle and rotate
+            float targetAngle = Mathf.Atan2(targetVector.x, targetVector.z) * Mathf.Rad2Deg;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, speed);
+
+            if (Mathf.Abs(targetAngle - angle) < 0.2f)
+            {
+                break;
+            }
+
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            yield return null;
+        }
+
+    }
+
     /*----------------------------
-              Game Event
+              Game Events
     -----------------------------*/
     private void NavClick(Vector3 point)
     {

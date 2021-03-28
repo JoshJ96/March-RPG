@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class GameEvents : MonoBehaviour
 {
@@ -12,9 +13,7 @@ public class GameEvents : MonoBehaviour
         instance = this;
     }
 
-    /*----------------------------
-        Game Environment Events
-     -----------------------------*/
+    #region Game Environment Events
 
     //Clicking an area on the navmesh
     public event Action<Vector3> navClick;
@@ -24,9 +23,9 @@ public class GameEvents : MonoBehaviour
     public event Action onClickRelease;
     public void OnClickRelease() => onClickRelease?.Invoke();
 
-    /*----------------------------
-        Save Data Events
-    -----------------------------*/
+    #endregion
+
+    #region Save Data Events
 
     //Save game data
     public event Action<GameData, string> saveData;
@@ -39,16 +38,17 @@ public class GameEvents : MonoBehaviour
         return JsonUtility.FromJson<GameData>(json);
     }
 
-    /*----------------------------
-        Player Events
-    -----------------------------*/
+    #endregion
+
+    #region Player Events
+    
     public event Action<PlayerController.States> changePlayerState;
     public void ChangePlayerState(PlayerController.States state) => changePlayerState?.Invoke(state);
 
-    /*----------------------------
-        Interactable Events
-    -----------------------------*/
+    #endregion
 
+    #region Interactable Events
+    
     //Interactable object hovered
     public event Action<Interactable> showInteractableHoverText;
     public void ShowInteractableHoverText(Interactable hovered) => showInteractableHoverText?.Invoke(hovered);
@@ -65,10 +65,33 @@ public class GameEvents : MonoBehaviour
     public event Action interactableDefocused;
     public void InteractableDefocused() => interactableDefocused?.Invoke();
 
+    #endregion
 
-    /*----------------------------
-        UI Events: Title Screen
-    -----------------------------*/
+    #region Inventory Events
+
+    //Attempt to add an item to the inventory
+    public event Action<Item, int> attemptAddItem;
+    public void AttemptAddItem(Item item, int qty) => attemptAddItem?.Invoke(item, qty);
+
+    //Add an item to the inventory
+    public event Action<Item, int, int> addItem;
+    public void AddItem(Item item, int qty, int slot) => addItem?.Invoke(item, qty, slot);
+
+    //Remove an item from inventory
+    public event Action<Item, int, int> removeItemFromSlot;
+    public void RemoveItemFromSlot(Item item, int qty, int slot) => removeItemFromSlot?.Invoke(item, qty, slot);
+
+    //Remove an item from inventory (first element found)
+    public event Action<Item, int> removeItem;
+    public void RemoveItem(Item item, int qty) => removeItem?.Invoke(item, qty);
+
+    //Update the inventory (mainly used for UI)
+    public event Action<Dictionary<Item, int>> updateInventory;
+    public void UpdateInventory(Dictionary<Item, int> inventory) => updateInventory?.Invoke(inventory);
+
+    #endregion
+
+    #region UI Events: Title Screen
 
     //Save slot clicked
     public event Action<int> saveSlotClick;
@@ -82,19 +105,23 @@ public class GameEvents : MonoBehaviour
     public event Action<GameData> startFile;
     public void StartFile(GameData file) => startFile?.Invoke(file);
 
-    /*----------------------------
-        UI Events: Pause Menu
-    -----------------------------*/
+    #endregion
+
+    #region UI Events: Pause Menu
+
     public event Action<PauseMenuManagement.States> changePauseState;
     public void ChangePauseState(PauseMenuManagement.States state) => changePauseState?.Invoke(state);
 
-    /*----------------------------
-        Dev Tools Events
-    -----------------------------*/
+    #endregion
+
+    #region Dev Tools Events
+
     //Dev tools button click
     public event Action devToolsButtonClick;
     public void DevToolsButtonClick() => devToolsButtonClick?.Invoke();
 
     public event Action<DevToolsManager.State> changeDevToolsState;
     public void ChangeDevToolsState(DevToolsManager.State state) => changeDevToolsState?.Invoke(state);
+
+    #endregion
 }

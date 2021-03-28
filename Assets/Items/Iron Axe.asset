@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df95ebd170f96ac41b6a5fe39dbd63d5, type: 3}
   m_Name: Iron Axe
   m_EditorClassIdentifier: 
+  UID: 0a7a3c213a6129844a57d027ff2860c9
   image: {fileID: 21300000, guid: b5c941068de4abf4b9793ad01f65511a, type: 3}
   itemName: Iron Axe
   itemDescription: A sturdy axe.
+  stackable: 0
   options: 010000000000000002000000

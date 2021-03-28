@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot
 {
-    public int slotNumber;
+    public InventorySlot(Item item, int qty, bool isEmpty)
+    {
+        this.item = item;
+        this.qty = qty;
+        this.isEmpty = isEmpty;
+    }
 
-    //Item and qty. if not stackable, qty is 1 and dont show text
+    public InventorySlot(bool isEmpty)
+    {
+        this.isEmpty = isEmpty;
+    }
+
+
+    public bool isEmpty;
     public Item item;
     public int qty;
-
-    private void Start()
-    {
-        //Maybe, maybe not
-        //string hoverText = item.options[0].ToString();
-    }
 }

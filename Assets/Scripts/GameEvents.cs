@@ -113,15 +113,4 @@ public class GameEvents : MonoBehaviour
     public void ChangePauseState(PauseMenuManagement.States state) => changePauseState?.Invoke(state);
 
     #endregion
-
-    #region Dev Tools Events
-
-    //Dev tools button click
-    public event Action devToolsButtonClick;
-    public void DevToolsButtonClick() => devToolsButtonClick?.Invoke();
-
-    public event Action<DevToolsManager.State> changeDevToolsState;
-    public void ChangeDevToolsState(DevToolsManager.State state) => changeDevToolsState?.Invoke(state);
-
-    #endregion
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -42,7 +41,18 @@ public class InventoryManager : MonoBehaviour
 
     private void AddItem(Item item, int qty, int slot)
     {
-        //inventory.Add()
+        if (item.stackable)
+        {
+
+        }
+        else
+        {
+            inventory[slot].isEmpty = false;
+            inventory[slot].item = item;
+            inventory[slot].qty = qty;
+        }
+
+        GameEvents.instance.UpdateInventory(inventory);
     }
 
     /*----------------------------

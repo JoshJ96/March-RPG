@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                GameEvents.instance.InteractableDefocused();
+                //GameEvents.instance.InteractableDefocused();
                 focus = value;
             }
         }
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
         //Event subscriptions
         GameEvents.instance.navClick += NavClick;
         GameEvents.instance.interactableClicked += InteractableClicked;
+        GameEvents.instance.interactableDefocused += InteractableDefocused;
 
         //Components
         agent = GetComponent<NavMeshAgent>();
@@ -111,8 +113,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (currentState == States.Normal)
                 {
+                    focus.Interact();
                     CurrentState = States.Interacting;
-                    StartCoroutine(RotateTowards(Focus.transform.position, 0.3f));
+                    if (Focus != null)
+                    {
+                        StartCoroutine(RotateTowards(Focus.transform.position, 0.3f));
+                    }
                 }
             }
             else
@@ -186,5 +192,11 @@ public class PlayerController : MonoBehaviour
                 Focus = obj;
                 break;
         }
+    }
+
+    private void InteractableDefocused()
+    {
+        CurrentState = States.Normal;
+        Focus = null;
     }
 }

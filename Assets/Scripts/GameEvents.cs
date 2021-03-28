@@ -86,8 +86,8 @@ public class GameEvents : MonoBehaviour
     public void RemoveItem(Item item, int qty) => removeItem?.Invoke(item, qty);
 
     //Update the inventory (mainly used for UI)
-    public event Action<Dictionary<Item, int>> updateInventory;
-    public void UpdateInventory(Dictionary<Item, int> inventory) => updateInventory?.Invoke(inventory);
+    public event Action<List<InventorySlot>> updateInventory;
+    public void UpdateInventory(List<InventorySlot> inventory) => updateInventory?.Invoke(inventory);
 
     #endregion
 

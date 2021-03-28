@@ -116,8 +116,13 @@ public class Interactable : MonoBehaviour
     }
 
     /*----------------------------
-         GetInteractablePoints
+                Methods
     -----------------------------*/
+    public virtual void Interact()
+    {
+        print($"Interacting with {this.objectName}.");
+    }
+
     public List<Vector3> GetInteractablePoints()
     {
         float x = interactionTransform.position.x;

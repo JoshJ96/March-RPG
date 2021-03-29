@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Inventory", menuName = "ScriptableObjects/Item", order = 1)]
+[CreateAssetMenu(fileName = "Inventory", menuName = "ScriptableObjects/Item")]
 public class Item : ScriptableObject
 {
     public enum Options
     {
         Use,
         Equip,
-        Drop
+        Drop,
+        Place
     }
 
     public Sprite image;

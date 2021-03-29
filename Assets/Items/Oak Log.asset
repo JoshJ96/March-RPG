@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df95ebd170f96ac41b6a5fe39dbd63d5, type: 3}
-  m_Name: Iron Axe
+  m_Script: {fileID: 11500000, guid: 0ead7d78879209f4cbdcaade1da0ea07, type: 3}
+  m_Name: Oak Log
   m_EditorClassIdentifier: 
-  image: {fileID: 8311846332090785447, guid: a27f18c182c77a043a80cfc60a4cbcc0, type: 3}
-  itemName: Iron Axe
-  itemDescription: A sturdy axe.
-  stackable: 0
-  options: 010000000000000002000000
+  image: {fileID: 5021457946971905949, guid: a27f18c182c77a043a80cfc60a4cbcc0, type: 3}
+  itemName: Oak Log
+  itemDescription: A regular oak log.
+  stackable: 1
+  options: 0000000002000000

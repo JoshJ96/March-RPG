@@ -115,14 +115,11 @@ public class PlayerController : MonoBehaviour
                 {
                     focus.Interact();
                     CurrentState = States.Interacting;
-                    if (Focus != null)
-                    {
-                        StartCoroutine(RotateTowards(Focus.transform.position, 0.3f));
-                    }
                 }
             }
             else
             {
+                RotateTowards(Focus.transform.position);
                 bool keepFocus = true;
                 Vector3 tempTarget = Helpers.GetClosestPoint(transform.position, Focus, out keepFocus);
                 if (keepFocus)
@@ -140,34 +137,18 @@ public class PlayerController : MonoBehaviour
 
     /*-------------------------------------------------------------------
                             RotateTowards
-            Rotates towards a Vector3 destination for X speed
+                Rotates towards a Vector3 destination
     ---------------------------------------------------------------------*/
-    float turnSmoothVelocity;
-    public IEnumerator RotateTowards(Vector3 destination, float speed)
+    public void RotateTowards(Vector3 destination)
     {
-        while (true)
-        {
-            if (CurrentState != States.Interacting)
-            {
-                break;
-            }
+        //Get directional vector towards destination
+        Vector3 targetVector = new Vector3(destination.x - transform.position.x, 0, destination.z - transform.position.z);
 
-            //Get directional vector towards destination
-            Vector3 targetVector = new Vector3(destination.x - transform.position.x, 0, destination.z - transform.position.z);
+        //Calculate movement angle and rotate
+        float targetAngle = Mathf.Atan2(targetVector.x, targetVector.z) * Mathf.Rad2Deg;
 
-            //Calculate movement angle and rotate
-            float targetAngle = Mathf.Atan2(targetVector.x, targetVector.z) * Mathf.Rad2Deg;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, speed);
-
-            if (Mathf.Abs(targetAngle - angle) < 0.2f)
-            {
-                break;
-            }
-
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            yield return null;
-        }
-
+        //Rotation
+        transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 
     /*----------------------------

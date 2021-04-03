@@ -77,10 +77,6 @@ public class GameEvents : MonoBehaviour
     public event Action<Item, int> removeItem;
     public void RemoveItem(Item item, int qty) => removeItem?.Invoke(item, qty);
 
-    //Update the inventory (mainly used for UI)
-    public event Action<List<InventorySlot>> updateInventory;
-    public void UpdateInventory(List<InventorySlot> inventory) => updateInventory?.Invoke(inventory);
-
     #endregion
 
     #region Item Actions
@@ -131,6 +127,17 @@ public class GameEvents : MonoBehaviour
     //Item slot hovered
     public event Action<InventorySlot> showInventorySlotHoverText;
     public void ShowInventorySlotHoverText(InventorySlot hovered) => showInventorySlotHoverText?.Invoke(hovered);
+
+    #endregion
+
+    #region UI Events: Inventory/Equipment
+
+    public event Action<InvEqpSwitcherBtn.ButtonType> switchInvEqpDisplay;
+    public void SwitchInvEqpDisplay(InvEqpSwitcherBtn.ButtonType button) => switchInvEqpDisplay?.Invoke(button);
+
+    //Update the inventory (mainly used for UI)
+    public event Action<List<InventorySlot>, List<EquiptableItem>> updateInventory;
+    public void UpdateInventory(List<InventorySlot> inventory, List<EquiptableItem> equipment) => updateInventory?.Invoke(inventory, equipment);
 
     #endregion
 }

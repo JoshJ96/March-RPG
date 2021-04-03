@@ -6,13 +6,47 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
     public List<InventorySlot> inventory;
+    public List<EquiptableItem> equipment;
+
     public int maxSize = 20;
+    public GameObject invPanel, eqpPanel;
+    public enum States
+    {
+        ShowInventory,
+        ShowEquipment
+    }
+    private States CurrentState = States.ShowInventory;
+    public States currentState
+    {
+        get
+        {
+            return CurrentState;
+        }
+        set
+        {
+            switch (value)
+            {
+                case States.ShowInventory:
+                    invPanel.transform.localScale = Vector3.one;
+                    eqpPanel.transform.localScale = Vector3.zero;
+                    break;
+                case States.ShowEquipment:
+                    invPanel.transform.localScale = Vector3.zero;
+                    eqpPanel.transform.localScale = Vector3.one;
+                    break;
+                default:
+                    break;
+            }
+            CurrentState = value;
+        }
+    }
 
     /*----------------------------
                 Start
     -----------------------------*/
     private void Start()
     {
+        print(this.gameObject.name);
         InitializeInventory(maxSize);
 
         //Event subscriptions
@@ -20,6 +54,7 @@ public class InventoryManager : MonoBehaviour
         GameEvents.instance.addItem += AddItem;
         GameEvents.instance.attemptItemAction += AttemptItemAction;
         GameEvents.instance.equipItem += EquipItem;
+        GameEvents.instance.switchInvEqpDisplay += SwitchInvEqpDisplay;
     }
 
     /*----------------------------
@@ -54,7 +89,7 @@ public class InventoryManager : MonoBehaviour
             inventory[slot].qty = qty;
         }
 
-        GameEvents.instance.UpdateInventory(inventory);
+        GameEvents.instance.UpdateInventory(inventory, equipment);
     }
 
     private void AttemptItemAction(Item item, Item.Options option, int inventorySlot)
@@ -83,7 +118,23 @@ public class InventoryManager : MonoBehaviour
         inventory[inventorySlot].item = null;
         inventory[inventorySlot].qty = 0;
         inventory[inventorySlot].isEmpty = true;
-        GameEvents.instance.UpdateInventory(inventory);
+        equipment.Add(item);
+        GameEvents.instance.UpdateInventory(inventory, equipment);
+    }
+
+    private void SwitchInvEqpDisplay(InvEqpSwitcherBtn.ButtonType button)
+    {
+        switch (button)
+        {
+            case InvEqpSwitcherBtn.ButtonType.Inventory:
+                currentState = States.ShowInventory;
+                break;
+            case InvEqpSwitcherBtn.ButtonType.Equipment:
+                currentState = States.ShowEquipment;
+                break;
+            default:
+                break;
+        }
     }
 
     /*----------------------------

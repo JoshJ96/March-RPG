@@ -19,7 +19,7 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
         GameEvents.instance.updateInventory += UpdateInventory;
     }
 
-    private void UpdateInventory(List<InventorySlot> inventory)
+    private void UpdateInventory(List<InventorySlot> inventory, List<EquiptableItem> equipment)
     {
         thisSlot = inventory[slot];
 

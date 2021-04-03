@@ -32,16 +32,16 @@ public class Interactable : MonoBehaviour
             switch (value)
             {
                 case InteractStates.Unfocused:
-                    GameEvents.instance.HideInteractableHoverText();
+                    GameEvents.instance.HideHoverText();
                     ChangeOutline(0.0f, Color.white);
                     break;
                 case InteractStates.Hovered:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(4.0f, Color.white);
+                    ChangeOutline(3.0f, Color.white);
                     break;
                 case InteractStates.Focused:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(4.0f, Color.yellow);
+                    ChangeOutline(3.0f, Color.yellow);
                     break;
                 default:
                     break;
@@ -58,6 +58,36 @@ public class Interactable : MonoBehaviour
     //Unity Components
     Outline outline;
 
+    bool CanDisplay = true;
+    public bool canDisplay
+    {
+        get 
+        {
+            return CanDisplay;
+        }
+        set
+        {
+            CanDisplay = value;
+            if (value == false)
+            {
+                ChangeOutline(0.0f, Color.white);
+            }
+        }
+    }
+
+
+    private void Update()
+    {
+
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            canDisplay = false;
+        }
+        else
+        {
+            canDisplay = true;
+        }
+    }
 
     /*----------------------------
                 Start
@@ -80,26 +110,24 @@ public class Interactable : MonoBehaviour
     /*----------------------------
              Mouse Events
     -----------------------------*/
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            return;
-        }
+            switch (InteractState)
+            {
+                case InteractStates.Unfocused:
+                    InteractState = InteractStates.Hovered;
+                    break;
+            }
 
-        switch (InteractState)
-        {
-            case InteractStates.Unfocused:
-                InteractState = InteractStates.Hovered;
-                break;
+            GameEvents.instance.ShowInteractableHoverText(this);
         }
-
-        GameEvents.instance.ShowInteractableHoverText(this);
     }
 
     private void OnMouseExit()
     {
-        GameEvents.instance.HideInteractableHoverText();
+        GameEvents.instance.HideHoverText();
 
         switch (InteractState)
         {
@@ -111,8 +139,12 @@ public class Interactable : MonoBehaviour
 
     private void OnMouseDown()
     {
-        GameEvents.instance.InteractableClicked(this);
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+                    GameEvents.instance.InteractableClicked(this);
         InteractState = InteractStates.Focused;
+        }
+
     }
 
     /*----------------------------

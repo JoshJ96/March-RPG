@@ -48,15 +48,7 @@ public class GameEvents : MonoBehaviour
     #endregion
 
     #region Interactable Events
-    
-    //Interactable object hovered
-    public event Action<Interactable> showInteractableHoverText;
-    public void ShowInteractableHoverText(Interactable hovered) => showInteractableHoverText?.Invoke(hovered);
-
-    //Interactable object de-hovered
-    public event Action hideInteractableHoverText;
-    public void HideInteractableHoverText() => hideInteractableHoverText?.Invoke();
-
+   
     //Interactable object clicked
     public event Action<Interactable> interactableClicked;
     public void InteractableClicked(Interactable obj) => interactableClicked?.Invoke(obj);
@@ -91,6 +83,18 @@ public class GameEvents : MonoBehaviour
 
     #endregion
 
+    #region Item Actions
+
+    //Attempt to perform the item action
+    public event Action<Item, Item.Options> attemptItemAction;
+    public void AttemptItemAction(Item item, Item.Options option) => attemptItemAction?.Invoke(item, option);
+
+    //Equip item action
+    public event Action<EquiptableItem, EquiptableItem.Slot> equipItem;
+    public void EquipItem(EquiptableItem item, EquiptableItem.Slot slot) => equipItem?.Invoke(item, slot);
+
+    #endregion
+
     #region UI Events: Title Screen
 
     //Save slot clicked
@@ -111,6 +115,22 @@ public class GameEvents : MonoBehaviour
 
     public event Action<PauseMenuManagement.States> changePauseState;
     public void ChangePauseState(PauseMenuManagement.States state) => changePauseState?.Invoke(state);
+
+    #endregion
+
+    #region UI Events: Hover Text
+
+    //Interactable object hovered
+    public event Action<Interactable> showInteractableHoverText;
+    public void ShowInteractableHoverText(Interactable hovered) => showInteractableHoverText?.Invoke(hovered);
+
+    //Interactable object de-hovered
+    public event Action hideHoverText;
+    public void HideHoverText() => hideHoverText?.Invoke();
+
+    //Item slot hovered
+    public event Action<InventorySlot> showInventorySlotHoverText;
+    public void ShowInventorySlotHoverText(InventorySlot hovered) => showInventorySlotHoverText?.Invoke(hovered);
 
     #endregion
 }

@@ -13,6 +13,7 @@ public class HoverText : MonoBehaviour
                 Variables
     -----------------------------*/
     TextMeshProUGUI info;
+    Vector3 offset = Vector3.zero;
 
     /*----------------------------
                 Start
@@ -21,7 +22,8 @@ public class HoverText : MonoBehaviour
     {
         info = GetComponent<TextMeshProUGUI>();
         GameEvents.instance.showInteractableHoverText += ShowInteractableHoverText;
-        GameEvents.instance.hideInteractableHoverText += HideInteractableHoverText;
+        GameEvents.instance.hideHoverText += HideHoverText;
+        GameEvents.instance.showInventorySlotHoverText += ShowInventorySlotHoverText;
     }
 
     /*----------------------------
@@ -35,7 +37,7 @@ public class HoverText : MonoBehaviour
     /*----------------------------
             Event Responses
     -----------------------------*/
-    private void HideInteractableHoverText()
+    private void HideHoverText()
     {
         transform.localScale = Vector3.zero;
     }
@@ -44,5 +46,10 @@ public class HoverText : MonoBehaviour
     {
         transform.localScale = Vector3.one;
         info.text = hovered.hoverText;
+    }
+    private void ShowInventorySlotHoverText(InventorySlot slot)
+    {
+        transform.localScale = Vector3.one;
+        info.text = $"{slot.item.options[0]} {slot.item.itemName}";
     }
 }

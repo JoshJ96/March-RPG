@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Int_ChopTree : Interactable
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Interact()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+
+
+        base.Interact();
     }
 }

@@ -25,10 +25,8 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
         if (thisSlot.isEmpty)
         {
-            /*
             image.gameObject.SetActive(false);
             qty.gameObject.SetActive(false);
-            */
             return;
         }
 
@@ -74,7 +72,7 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 {
                     if (!thisSlot.isEmpty)
                     {
-                        GameEvents.instance.AttemptItemAction(thisSlot.item, thisSlot.item.options[0]);
+                        GameEvents.instance.AttemptItemAction(thisSlot.item, thisSlot.item.options[0], slot);
                     }
                 }
                 break;

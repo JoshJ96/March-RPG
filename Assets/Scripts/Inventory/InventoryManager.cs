@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
         //Event subscriptions
         GameEvents.instance.attemptAddItem += AttemptAddItem;
         GameEvents.instance.addItem += AddItem;
+        GameEvents.instance.attemptItemAction += AttemptItemAction;
+        GameEvents.instance.equipItem += EquipItem;
     }
 
     /*----------------------------
@@ -52,6 +54,35 @@ public class InventoryManager : MonoBehaviour
             inventory[slot].qty = qty;
         }
 
+        GameEvents.instance.UpdateInventory(inventory);
+    }
+
+    private void AttemptItemAction(Item item, Item.Options option, int inventorySlot)
+    {
+        //Todo: checks n stuff
+
+        switch (option)
+        {
+            case Item.Options.Use:
+                break;
+            case Item.Options.Equip:
+                EquiptableItem e_item = (EquiptableItem) item;
+                GameEvents.instance.EquipItem(e_item, e_item.slot, inventorySlot);
+                break;
+            case Item.Options.Drop:
+                break;
+            case Item.Options.Place:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void EquipItem(EquiptableItem item, EquiptableItem.Slot slot, int inventorySlot)
+    {
+        inventory[inventorySlot].item = null;
+        inventory[inventorySlot].qty = 0;
+        inventory[inventorySlot].isEmpty = true;
         GameEvents.instance.UpdateInventory(inventory);
     }
 

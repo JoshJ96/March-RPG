@@ -17,3 +17,5 @@ MonoBehaviour:
   itemDescription: A sturdy axe.
   stackable: 0
   options: 010000000000000002000000
+  slot: 0
+  mesh: {fileID: 596606846441270178, guid: 566a3b23b27925d469c41eb21e053a78, type: 3}

@@ -86,12 +86,12 @@ public class GameEvents : MonoBehaviour
     #region Item Actions
 
     //Attempt to perform the item action
-    public event Action<Item, Item.Options> attemptItemAction;
-    public void AttemptItemAction(Item item, Item.Options option) => attemptItemAction?.Invoke(item, option);
+    public event Action<Item, Item.Options, int> attemptItemAction;
+    public void AttemptItemAction(Item item, Item.Options option, int inventorySlot) => attemptItemAction?.Invoke(item, option, inventorySlot);
 
     //Equip item action
-    public event Action<EquiptableItem, EquiptableItem.Slot> equipItem;
-    public void EquipItem(EquiptableItem item, EquiptableItem.Slot slot) => equipItem?.Invoke(item, slot);
+    public event Action<EquiptableItem, EquiptableItem.Slot, int> equipItem;
+    public void EquipItem(EquiptableItem item, EquiptableItem.Slot slot, int inventorySlot) => equipItem?.Invoke(item, slot, inventorySlot);
 
     #endregion
 

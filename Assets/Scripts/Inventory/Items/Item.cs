@@ -10,8 +10,9 @@ public class Item : ScriptableObject
     {
         Use,
         Equip,
+        Unequip,
         Drop,
-        Place
+        Place,
     }
 
     public Sprite image;

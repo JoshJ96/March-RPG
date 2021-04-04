@@ -21805,6 +21805,104 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1374641989}
   m_CullTransparentMesh: 1
+--- !u!1001 &1384524083
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3222216
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3222216
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3222216
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.174459
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.4913664
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.123369
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+      propertyPath: m_Name
+      value: Barrel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+--- !u!1 &1384524084 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+  m_PrefabInstance: {fileID: 1384524083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1384524085 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d95569024dd0b0e4ea587e2cc4cc57e8, type: 3}
+  m_PrefabInstance: {fileID: 1384524083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1384524086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384524084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e2665dd8e3c394fa08f3dd532c9de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Barrel
+  hoverText: Search <color="yellow">Barrel</color>
+  interactionTransform: {fileID: 1384524085}
+  interactionRadius: 2.19
+  itemToGive: {fileID: 11400000, guid: dc918f95ff45d7d4fa0e83f5e2422ba1, type: 2}
+  qty: 1
+  unlimited: 1
 --- !u!1 &1384618072
 GameObject:
   m_ObjectHideFlags: 0
@@ -23315,7 +23413,7 @@ Transform:
   m_Children:
   - {fileID: 4776330902786037054}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1589206318
 GameObject:
@@ -28713,7 +28811,7 @@ Transform:
   - {fileID: 144152131}
   - {fileID: 2064014807}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2107215479
 MonoBehaviour:

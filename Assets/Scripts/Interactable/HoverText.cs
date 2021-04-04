@@ -24,6 +24,7 @@ public class HoverText : MonoBehaviour
         GameEvents.instance.showInteractableHoverText += ShowInteractableHoverText;
         GameEvents.instance.hideHoverText += HideHoverText;
         GameEvents.instance.showInventorySlotHoverText += ShowInventorySlotHoverText;
+        GameEvents.instance.showUnequipOption += ShowUnequipOption;
     }
 
     /*----------------------------
@@ -51,5 +52,10 @@ public class HoverText : MonoBehaviour
     {
         transform.localScale = Vector3.one;
         info.text = $"{slot.item.options[0]} {slot.item.itemName}";
+    }
+    private void ShowUnequipOption(EquiptableItem item)
+    {
+        transform.localScale = Vector3.one;
+        info.text = $"Unequip {item.itemName}";
     }
 }

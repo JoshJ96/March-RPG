@@ -77,6 +77,10 @@ public class GameEvents : MonoBehaviour
     public event Action<Item, int> removeItem;
     public void RemoveItem(Item item, int qty) => removeItem?.Invoke(item, qty);
 
+    //Attempt unequip
+    public event Action<EquiptableItem> attemptUnequip;
+    public void AttemptUnequip(EquiptableItem item) => attemptUnequip?.Invoke(item);
+
     #endregion
 
     #region Item Actions
@@ -127,6 +131,10 @@ public class GameEvents : MonoBehaviour
     //Item slot hovered
     public event Action<InventorySlot> showInventorySlotHoverText;
     public void ShowInventorySlotHoverText(InventorySlot hovered) => showInventorySlotHoverText?.Invoke(hovered);
+
+    //Equip slot hovered
+    public event Action<EquiptableItem> showUnequipOption;
+    public void ShowUnequipOption(EquiptableItem hovered) => showUnequipOption?.Invoke(hovered);
 
     #endregion
 

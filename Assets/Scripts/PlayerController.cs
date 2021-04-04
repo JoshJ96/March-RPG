@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         //Keep following focus
         if (Focus != null)
         {
-            if (transform.position.x == Target.x && transform.position.z == Target.z)
+            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(Target.x, 0, Target.z)) < 0.3f)
             {
                 if (currentState == States.Normal)
                 {

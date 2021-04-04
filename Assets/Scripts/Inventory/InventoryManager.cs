@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -55,6 +56,7 @@ public class InventoryManager : MonoBehaviour
         GameEvents.instance.attemptItemAction += AttemptItemAction;
         GameEvents.instance.equipItem += EquipItem;
         GameEvents.instance.switchInvEqpDisplay += SwitchInvEqpDisplay;
+        GameEvents.instance.attemptUnequip += AttemptUnequip;
     }
 
     /*----------------------------
@@ -115,10 +117,23 @@ public class InventoryManager : MonoBehaviour
 
     private void EquipItem(EquiptableItem item, EquiptableItem.Slot slot, int inventorySlot)
     {
+        //Null inv slot
         inventory[inventorySlot].item = null;
         inventory[inventorySlot].qty = 0;
         inventory[inventorySlot].isEmpty = true;
+
+        //Unequip current item (if necessary)
+        EquiptableItem equippedItem = equipment.FirstOrDefault(x => x.slot == slot);
+        if (equippedItem != null)
+        {
+            InventorySlot addTo = FindFirstAvailableSlot();
+            addTo.item = equippedItem;
+            addTo.isEmpty = false;
+        }
+
+        //Add to equipment
         equipment.Add(item);
+
         GameEvents.instance.UpdateInventory(inventory, equipment);
     }
 
@@ -135,6 +150,20 @@ public class InventoryManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void AttemptUnequip(EquiptableItem item)
+    {
+        if (FindFirstAvailableSlot() != null)
+        {
+
+            InventorySlot addTo = FindFirstAvailableSlot();
+            addTo.item = item;
+            addTo.isEmpty = false;
+            equipment.Remove(equipment.FirstOrDefault(x => x == item));
+        }
+
+        GameEvents.instance.UpdateInventory(inventory, equipment);
     }
 
     /*----------------------------
@@ -177,5 +206,18 @@ public class InventoryManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public InventorySlot FindFirstAvailableSlot()
+    {
+        for (int i = 0; i < maxSize; i++)
+        {
+            if (inventory[i].isEmpty)
+            {
+                return inventory[i];
+            }
+        }
+
+        return null;
     }
 }

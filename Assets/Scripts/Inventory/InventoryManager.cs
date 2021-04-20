@@ -129,6 +129,7 @@ public class InventoryManager : MonoBehaviour
             InventorySlot addTo = FindFirstAvailableSlot();
             addTo.item = equippedItem;
             addTo.isEmpty = false;
+            equipment.Remove(equipment.FirstOrDefault(x => x.itemName == item.itemName));
         }
 
         //Add to equipment
@@ -160,7 +161,7 @@ public class InventoryManager : MonoBehaviour
             InventorySlot addTo = FindFirstAvailableSlot();
             addTo.item = item;
             addTo.isEmpty = false;
-            equipment.Remove(equipment.FirstOrDefault(x => x == item));
+            equipment.Remove(equipment.FirstOrDefault(x => x.itemName == item.itemName));
         }
 
         GameEvents.instance.UpdateInventory(inventory, equipment);

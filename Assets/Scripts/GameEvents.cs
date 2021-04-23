@@ -6,6 +6,9 @@ using UnityEngine.Networking;
 
 public class GameEvents : MonoBehaviour
 {
+    public Color c_hoveredInteractable;
+    public Color c_clickedInteractable;
+
     public static GameEvents instance;
 
     void Awake()

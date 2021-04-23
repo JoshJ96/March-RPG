@@ -74,28 +74,56 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerDow
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        //Don't perform use actions if dragging
+        if (dragging || inventoryManager.draggingAnItem)
+        {
+            return;
+        }
+
+        //Don't perform use actions if no item
+        if (inventoryManager.inventory[slot] == null)
+        {
+            return;
+        }
+        else
+        {
+            if (inventoryManager.inventory[slot].isEmpty)
+            {
+                return;
+            }
+        }
+
+        switch (eventData.button)
+        {
+            case PointerEventData.InputButton.Left:
+                GameEvents.instance.AttemptItemAction(inventoryManager.inventory[slot].item, inventoryManager.inventory[slot].item.options[0], slot);
+                break;
+            case PointerEventData.InputButton.Right:
+                break;
+            case PointerEventData.InputButton.Middle:
+                break;
+            default:
+                break;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //If we're not dragging anything, exit
-        if (!dragging || !inventoryManager.draggingAnItem)
+        switch (eventData.button)
         {
-            return;
-        }
-        //If the slot desired is out of bounds, or if it didn't move at all. Do nothing
-        if (inventoryManager.currentHoveredSlot == null || inventoryManager.currentHoveredSlot == inventoryManager.currentDraggedSlot)
-        {
-            EndItemDrag();
-        }
-
-        //Swap
-        else
-        {
-            inventoryManager.SwapSlots(inventoryManager.currentDraggedSlot, inventoryManager.currentHoveredSlot);
-            EndItemDrag();
+            case PointerEventData.InputButton.Left:
+                ItemReleaseAction();
+                break;
+            case PointerEventData.InputButton.Right:
+                break;
+            case PointerEventData.InputButton.Middle:
+                break;
+            default:
+                break;
         }
     }
+
+
 
 
     /*----------------------------
@@ -137,6 +165,11 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerDow
 
         else
         {
+            if (!Input.GetMouseButton(0))
+            {
+                ItemReleaseAction();
+            }
+
             hoverTimer = 0;
         }
 
@@ -146,6 +179,9 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerDow
         }
     }
 
+    /*----------------------------
+                Helpers
+    -----------------------------*/
     private void StartItemDrag()
     {
         GameEvents.instance.HideHoverText();
@@ -163,6 +199,27 @@ public class InventoryGUISlot : MonoBehaviour, IPointerEnterHandler, IPointerDow
         inventoryManager.currentDraggedSlot = null;
         image.color = new Color(image.color.r, image.color.g, image.color.b, 1.00f);
         hoverTimer = 0;
+    }
+
+    private void ItemReleaseAction()
+    {
+        //If we're not dragging anything, exit
+        if (!dragging || !inventoryManager.draggingAnItem)
+        {
+            return;
+        }
+        //If the slot desired is out of bounds, or if it didn't move at all. Do nothing
+        if (inventoryManager.currentHoveredSlot == null || inventoryManager.currentHoveredSlot == inventoryManager.currentDraggedSlot)
+        {
+            EndItemDrag();
+        }
+
+        //Swap
+        else
+        {
+            inventoryManager.SwapSlots(inventoryManager.currentDraggedSlot, inventoryManager.currentHoveredSlot);
+            EndItemDrag();
+        }
     }
 
     /*----------------------------

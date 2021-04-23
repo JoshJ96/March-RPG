@@ -177,8 +177,6 @@ public class InventoryManager : MonoBehaviour
     -----------------------------*/
     public void SwapSlots(InventorySlot dragged, InventorySlot hovered)
     {
-        print($"Swapping slots {inventory.IndexOf(dragged)} and {inventory.IndexOf(hovered)}");
-
         //Perform the swap!
         InventorySlot temp_hovered = new InventorySlot(hovered.item, hovered.qty, hovered.isEmpty);
         InventorySlot temp_dragged = new InventorySlot(dragged.item, dragged.qty, dragged.isEmpty);

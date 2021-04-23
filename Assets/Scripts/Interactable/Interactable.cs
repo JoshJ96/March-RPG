@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Interactable : MonoBehaviour
 {
+
     /*----------------------------
               Variables
     -----------------------------*/
@@ -33,15 +34,15 @@ public class Interactable : MonoBehaviour
             {
                 case InteractStates.Unfocused:
                     GameEvents.instance.HideHoverText();
-                    ChangeOutline(0.0f, Color.white);
+                    ChangeOutline(0.0f, GameEvents.instance.c_hoveredInteractable);
                     break;
                 case InteractStates.Hovered:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(3.0f, Color.white);
+                    ChangeOutline(10.0f, GameEvents.instance.c_hoveredInteractable);
                     break;
                 case InteractStates.Focused:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(3.0f, Color.yellow);
+                    ChangeOutline(10.0f, GameEvents.instance.c_clickedInteractable);
                     break;
                 default:
                     break;

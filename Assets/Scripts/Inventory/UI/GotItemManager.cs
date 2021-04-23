@@ -17,9 +17,9 @@ public class GotItemManager : MonoBehaviour
     private void AddItem(Item item, int qty, int slot)
     {
         GameObject card = Instantiate(gotItemCard);
-        card.transform.parent = this.transform;
+        card.GetComponent<RectTransform>().SetParent(this.transform, false);
         card.GetComponent<GotItemCard>().image.sprite = item.image;
         card.GetComponent<GotItemCard>().itemName.text = item.itemName;
-        card.GetComponent<GotItemCard>().qty.text = $"+{qty.ToString()}";
+        card.GetComponent<GotItemCard>().qty.text = $"+{qty}";
     }
 }

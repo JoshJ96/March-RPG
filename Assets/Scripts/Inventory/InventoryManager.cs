@@ -42,6 +42,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public bool draggingAnItem = false;
+
+    public InventorySlot currentDraggedSlot;
+    public InventorySlot currentHoveredSlot;
+
     /*----------------------------
                 Start
     -----------------------------*/
@@ -170,6 +175,25 @@ public class InventoryManager : MonoBehaviour
     /*----------------------------
                Helpers
     -----------------------------*/
+    public void SwapSlots(InventorySlot dragged, InventorySlot hovered)
+    {
+        print($"Swapping slots {inventory.IndexOf(dragged)} and {inventory.IndexOf(hovered)}");
+
+        //Perform the swap!
+        InventorySlot temp_hovered = new InventorySlot(hovered.item, hovered.qty, hovered.isEmpty);
+        InventorySlot temp_dragged = new InventorySlot(dragged.item, dragged.qty, dragged.isEmpty);
+
+        hovered.item = temp_dragged.item;
+        hovered.qty = temp_dragged.qty;
+        hovered.isEmpty = temp_dragged.isEmpty;
+
+        dragged.item = temp_hovered.item;
+        dragged.qty = temp_hovered.qty;
+        dragged.isEmpty = temp_hovered.isEmpty;
+
+        GameEvents.instance.UpdateInventory(inventory, equipment);
+    }
+
     public void InitializeInventory(int size)
     {
         inventory = new List<InventorySlot>(size);

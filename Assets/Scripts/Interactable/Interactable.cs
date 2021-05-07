@@ -10,6 +10,7 @@ public class Interactable : MonoBehaviour
     /*----------------------------
               Variables
     -----------------------------*/
+
     //Definitions
     public enum InteractStates
     {
@@ -38,11 +39,11 @@ public class Interactable : MonoBehaviour
                     break;
                 case InteractStates.Hovered:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(10.0f, GameEvents.instance.c_hoveredInteractable);
+                    ChangeOutline(3.0f, GameEvents.instance.c_hoveredInteractable);
                     break;
                 case InteractStates.Focused:
                     GameEvents.instance.ShowInteractableHoverText(this);
-                    ChangeOutline(10.0f, GameEvents.instance.c_clickedInteractable);
+                    ChangeOutline(3.0f, GameEvents.instance.c_clickedInteractable);
                     break;
                 default:
                     break;
@@ -79,7 +80,6 @@ public class Interactable : MonoBehaviour
 
     private void Update()
     {
-
         if (EventSystem.current.IsPointerOverGameObject())
         {
             canDisplay = false;
@@ -93,7 +93,7 @@ public class Interactable : MonoBehaviour
     /*----------------------------
                 Start
     -----------------------------*/
-    private void Start()
+    public virtual void Start()
     {
         //Event subscriptions
         GameEvents.instance.changePlayerState += ChangePlayerState;
@@ -142,8 +142,9 @@ public class Interactable : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-                    GameEvents.instance.InteractableClicked(this);
-        InteractState = InteractStates.Focused;
+            GameEvents.instance.InteractableDefocused();
+            GameEvents.instance.InteractableClicked(this);
+            InteractState = InteractStates.Focused;
         }
 
     }

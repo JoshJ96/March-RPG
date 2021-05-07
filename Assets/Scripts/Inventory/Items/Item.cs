@@ -15,11 +15,17 @@ public class Item : ScriptableObject
         Place,
     }
 
+    public enum Category
+    {
+        None,
+        Hatchet
+    }
+
     public Sprite image;
     public string itemName;
     public string itemDescription;
     public bool stackable;
-
+    public Category category;
 
     public List<Options> options;
 }

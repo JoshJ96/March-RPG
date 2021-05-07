@@ -122,6 +122,8 @@ public class InventoryManager : MonoBehaviour
 
     private void EquipItem(EquiptableItem item, EquiptableItem.Slot slot, int inventorySlot)
     {
+        GameEvents.instance.InteractableDefocused();
+
         //Null inv slot
         inventory[inventorySlot].item = null;
         inventory[inventorySlot].qty = 0;
@@ -242,5 +244,42 @@ public class InventoryManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    //Looks for an item of category
+    public bool InventoryContainsItemWithCategory(Item.Category category, out List<InventorySlot> result)
+    {
+        List<InventorySlot> temp = new List<InventorySlot>();
+
+        foreach (var item in inventory)
+        {
+            if (item.item != null)
+            {
+                if (item.item.category == category)
+                {
+                    temp.Add(item);
+                }
+            }
+        }
+
+        //Out the list
+        result = temp;
+
+        //Return true if an item is present
+        return temp.Count != 0;
+    }
+
+    //Looks for a specific item
+    public bool InventoryContains(Item lookingFor)
+    {
+        bool found = false;
+        foreach (var slot in inventory)
+        {
+            if (slot.item == lookingFor)
+            {
+                found = true;
+            }
+        }
+        return found;
     }
 }

@@ -26,7 +26,8 @@ public class ClickManager : MonoBehaviour
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(clickedLocation.point, out hit, 1.0f, NavMesh.AllAreas))
                 {
-                  GameEvents.instance.NavClick(clickedLocation.point);
+                    GameEvents.instance.InteractableDefocused();
+                    GameEvents.instance.NavClick(clickedLocation.point);
                 }
                 else
                 {

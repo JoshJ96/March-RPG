@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
                 if (currentState == States.Normal)
                 {
                     focus.Interact();
-                    CurrentState = States.Interacting;
+                    currentState = States.Interacting;
                 }
             }
             else
